@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import UserController from '../controllers/user.controller.js';
-// melara
+// me
 const User = new UserController();
 
 const router = Router();
