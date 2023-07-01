@@ -16,7 +16,7 @@ class UserController {
     }
   }
 
-  async findAll(_, res) {
+  async find(_, res) {
     try {
       const users = await service.find();
       res.status(200).json(users);
