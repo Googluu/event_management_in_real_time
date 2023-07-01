@@ -1,7 +1,5 @@
 import { faker } from '@faker-js/faker';
 
-// const faker = new Faker();
-
 const generateUsers = () => {
   return {
     id: faker.string.uuid(),
