@@ -6,10 +6,10 @@ const User = new UserController();
 
 const router = Router();
 
-router.get('/users', User.findAll);
-router.get('/users/:id', User.findOne);
-router.post('/users', User.create);
-router.put('/users/:id', User.update);
-router.delete('/users/:id', User.delete);
+router.get('/', User.findAll);
+router.get('/:id', User.findOne);
+router.post('/', User.create);
+router.put('/:id', User.update);
+router.delete('/:id', User.delete);
 
 export default router;

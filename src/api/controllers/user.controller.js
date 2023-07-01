@@ -1,24 +1,25 @@
 import UserService from '../services/user.service.js';
 
+const service = new UserService();
 class UserController {
-  constructor() {
-    this.service = new UserService();
-  }
+  // constructor() {
+  //   this.service = new UserService();
+  // }
 
   create(req, res) {
     try {
       const body = req.body;
-      const newUser = this.service.create(body);
+      const newUser = service.create(body);
       res.status(201).json(newUser);
     } catch (error) {
       console.log(error);
     }
   }
 
-  findAll(_, res) {
+  async findAll(_, res) {
     try {
-      const user = this.service.find();
-      res.status(200).json(user);
+      const users = await service.find();
+      res.status(200).json(users);
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +28,7 @@ class UserController {
   findOne(req, res) {
     try {
       const { id } = req.params;
-      const user = this.service.findOne(id);
+      const user = service.findOne(id);
       res.status(200).json(user);
     } catch (error) {
       console.log(error);
@@ -38,7 +39,7 @@ class UserController {
     try {
       const { id } = req.params;
       const body = req.body;
-      const user = this.service.update(id, body);
+      const user = service.update(id, body);
       res.status(200).json(user);
     } catch (error) {
       console.log(error);
@@ -48,7 +49,7 @@ class UserController {
   delete(req, res) {
     try {
       const { id } = req.params;
-      const exUser = this.service.delete(id);
+      const exUser = service.delete(id);
       res.status(204).json(exUser);
     } catch (error) {
       console.log(error);

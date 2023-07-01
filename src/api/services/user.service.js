@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import generateUsers from '../../database/mooks/user.mook.js';
 
+// const faker = new Faker();
 class UserService {
   constructor() {
     this.users = [];
@@ -24,7 +25,7 @@ class UserService {
     return newUser;
   }
 
-  find() {
+  async find() {
     return this.users;
   }
 
@@ -35,11 +36,11 @@ class UserService {
 
   update(id, change) {
     const index = this.users.findIndex((user) => user.id === id);
-    if (index === -1) throw new Error(`User ${id} already exists`);
+    if (index === -1) throw new Error(`User ${id} not found`);
     const user = this.users[index];
     this.users[index] = {
-      ...change,
       ...user,
+      ...change,
     };
     return this.users[index];
   }
