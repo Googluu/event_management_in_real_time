@@ -3,5 +3,5 @@ export const errorHanlder = (err, _, res, next) => {
     message: err.message,
     stack: err.stack,
   });
-  next();
+  next(err);
 };
