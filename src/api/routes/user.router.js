@@ -1,14 +1,18 @@
 import { Router } from 'express';
 
-import UserController from '../controllers/user.controller.js';
-const User = new UserController();
+import {
+  signup,
+  login,
+  verifyToken,
+  getUser,
+} from '../controllers/user.controller.js';
+
+import { checkEmailExists } from '../../middleware/checkEmailExists.js';
 
 const router = Router();
 
-router.get('/', User.find);
-router.get('/:id', User.findOne);
-router.post('/', User.create);
-router.put('/:id', User.update);
-router.delete('/:id', User.delete);
+router.post('/signup', checkEmailExists, signup);
+router.post('/login', login);
+router.get('/user', verifyToken, getUser);
 
 export default router;
