@@ -1,54 +1,51 @@
-import { faker } from '@faker-js/faker';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import { unauthorized, notFound } from '@hapi/boom';
 
-import generateUsers from '../../database/mooks/user.mook.js';
+import { User } from '../../database/entities/user.entity.js';
+import { setup } from '../../config/config.js';
 
-// const faker = new Faker();
 class UserService {
-  constructor() {
-    this.users = [];
-    this.generate();
-  }
-
-  generate() {
-    let limit = 10;
-    for (let i = 0; i < limit; i++) {
-      this.users.push(generateUsers());
-    }
-  }
-
-  create(data) {
-    const newUser = {
-      id: faker.string.uuid(),
+  async signup(data) {
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hash = bcrypt.hashSync(data.password, salt);
+    const newUser = new User({
       ...data,
+      password: hash,
+    });
+    const response = await newUser.save();
+    return response;
+  }
+
+  async login(email, password) {
+    const user = await User.findOne({ email });
+    if (!user) throw unauthorized();
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    if (!isPasswordValid) throw unauthorized();
+    const payload = {
+      sub: user._id,
+      role: user.role,
     };
-    this.users.push(newUser);
-    return newUser;
+    const token = jwt.sign(payload, setup.jwtKey, { expiresIn: '1hr' });
+    return {
+      user,
+      token,
+    };
   }
 
-  async find() {
-    return this.users;
-  }
-
-  findOne(id) {
-    const user = this.users.find((item) => item.id === id);
+  async verifyToken(headers) {
+    const token = headers.split(' ')[1];
+    if (!token) throw notFound('token not found');
+    const user = jwt.verify(token, setup.jwtKey);
+    if (!user) throw unauthorized();
     return user;
   }
 
-  update(id, change) {
-    const index = this.users.findIndex((user) => user.id === id);
-    if (index === -1) throw new Error(`User ${id} not found`);
-    const user = this.users[index];
-    this.users[index] = {
-      ...user,
-      ...change,
-    };
-    return this.users[index];
-  }
-
-  delete(id) {
-    const index = this.users.findIndex((user) => user.id === id);
-    if (index === -1) throw new Error(`User ${id} already exists`);
-    this.users.splice(index, 1);
+  async getUser(userId) {
+    const user = await User.findById(userId, '-password');
+    if (!user) throw notFound('token not found');
+    return user;
   }
 }
 
