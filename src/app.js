@@ -4,7 +4,7 @@ import express from 'express';
 import { routerApi } from './api/routes/server/index.js';
 
 // MIDDLEWARE
-import { errorHanlder } from './middleware/err.handler.js';
+import { errorHanlder, boomErrHandler } from './middleware/err.handler.js';
 
 const createApp = () => {
   const app = express();
@@ -19,6 +19,7 @@ const createApp = () => {
 
   // MIDDLEWARE
   app.use(errorHanlder);
+  app.use(boomErrHandler);
 
   return app;
 };

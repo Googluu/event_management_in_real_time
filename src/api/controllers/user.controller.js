@@ -1,60 +1,47 @@
 import UserService from '../services/user.service.js';
 
 const service = new UserService();
-class UserController {
-  // constructor() {
-  //   this.service = new UserService();
-  // }
 
-  create(req, res) {
-    try {
-      const body = req.body;
-      const newUser = service.create(body);
-      res.status(201).json(newUser);
-    } catch (error) {
-      console.log(error);
-    }
+export const signup = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const user = await service.signup(body);
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
   }
+};
 
-  async find(_, res) {
-    try {
-      const users = await service.find();
-      res.status(200).json(users);
-    } catch (error) {
-      console.log(error);
-    }
+export const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await service.login(email, password);
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
   }
+};
 
-  findOne(req, res) {
-    try {
-      const { id } = req.params;
-      const user = service.findOne(id);
-      res.status(200).json(user);
-    } catch (error) {
-      console.log(error);
-    }
+export const verifyToken = async (req, res, next) => {
+  try {
+    const headers = req.headers['authorization'];
+    console.log(headers);
+    const user = await service.verifyToken(headers);
+    req.sub = user.sub;
+    next();
+  } catch (error) {
+    next(error);
   }
+  // next();
+};
 
-  update(req, res) {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const user = service.update(id, body);
-      res.status(200).json(user);
-    } catch (error) {
-      console.log(error);
-    }
+export const getUser = async (req, res, next) => {
+  try {
+    const userId = req.sub;
+    console.log(userId);
+    const user = await service.getUser(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
   }
-
-  delete(req, res) {
-    try {
-      const { id } = req.params;
-      const exUser = service.delete(id);
-      res.status(204).json(exUser);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-}
-
-export default UserController;
+};
