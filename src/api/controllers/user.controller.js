@@ -25,12 +25,14 @@ export const login = async (req, res, next) => {
 export const verifyToken = async (req, res, next) => {
   try {
     const headers = req.headers['authorization'];
+    console.log(headers);
     const user = await service.verifyToken(headers);
     req.sub = user.sub;
+    next();
   } catch (error) {
     next(error);
   }
-  next();
+  // next();
 };
 
 export const getUser = async (req, res, next) => {

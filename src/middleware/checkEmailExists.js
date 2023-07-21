@@ -1,6 +1,6 @@
 import { User } from '../database/entities/user.entity.js';
 
-export const checkEmailExists = async (req, res) => {
+export const checkEmailExists = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {

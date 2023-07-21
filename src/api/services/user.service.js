@@ -21,7 +21,7 @@ class UserService {
   async login(email, password) {
     const user = await User.findOne({ email });
     if (!user) throw unauthorized();
-    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    const isPasswordValid = bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw unauthorized();
     const payload = {
       sub: user._id,
@@ -35,7 +35,7 @@ class UserService {
   }
 
   async verifyToken(headers) {
-    const token = headers.split(' ')[1];
+    const token = headers.split('Bearer ')[1];
     if (!token) throw notFound('token not found');
     const user = jwt.verify(token, setup.jwtKey);
     if (!user) throw unauthorized();
