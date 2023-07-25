@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-// const id = Joi.object().id();
+const id = Joi.string().id();
 const name = Joi.string().min(3).max(15);
 const email = Joi.string().email();
 const password = Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{6,30}$'));
@@ -13,4 +13,13 @@ export const createUser = Joi.object({
   password: password.required(),
   avatar: avatar.required(),
   role: role.required(),
+});
+
+export const updateUser = Joi.object({
+  name,
+  avatar,
+});
+
+export const userId = Joi.object({
+  id: id.required(),
 });

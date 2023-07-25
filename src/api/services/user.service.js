@@ -18,6 +18,10 @@ class UserService {
     return response;
   }
 
+  async updateInfoUser(id, changes) {
+    return User.findByIdAndUpdate(id, changes, { upsert: true, new: true });
+  }
+
   async login(email, password) {
     const user = await User.findOne({ email });
     if (!user) throw unauthorized();
@@ -27,7 +31,7 @@ class UserService {
       sub: user._id,
       role: user.role,
     };
-    const token = jwt.sign(payload, setup.jwtKey, { expiresIn: '1hr' });
+    const token = jwt.sign(payload, setup.jwtKey, { expiresIn: '24hr' });
     return {
       user,
       token,

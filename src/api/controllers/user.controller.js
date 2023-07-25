@@ -1,11 +1,31 @@
+import { validateHandler } from '../../middleware/validator.handler.js';
+import { createUser, updateUser, userId } from '../dtos/user.dto.js';
 import UserService from '../services/user.service.js';
-
 const service = new UserService();
 
 export const signup = async (req, res, next) => {
   try {
     const body = req.body;
+
+    // Validar los datos recibidos usando el DTO de registro/creacion
+    validateHandler(createUser, 'body')(req, res, next);
+
     const user = await service.signup(body);
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateInfoUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+
+    validateHandler(userId, 'params')(req, res, next);
+    validateHandler(updateUser, 'body')(req, res, next);
+
+    const user = await service.updateInfoUser(id, body);
     res.status(200).json(user);
   } catch (error) {
     next(error);
