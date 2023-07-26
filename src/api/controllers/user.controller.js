@@ -8,7 +8,7 @@ export const signup = async (req, res, next) => {
     const body = req.body;
 
     // Validar los datos recibidos usando el DTO de registro/creacion
-    validateHandler(createUser, 'body')(req, res, next);
+    validateHandler(createUser, 'body');
 
     const user = await service.signup(body);
     res.status(200).json(user);
@@ -22,8 +22,8 @@ export const updateInfoUser = async (req, res, next) => {
     const { id } = req.params;
     const body = req.body;
 
-    validateHandler(userId, 'params')(req, res, next);
-    validateHandler(updateUser, 'body')(req, res, next);
+    validateHandler(userId, 'params');
+    validateHandler(updateUser, 'body');
 
     const user = await service.updateInfoUser(id, body);
     res.status(200).json(user);
