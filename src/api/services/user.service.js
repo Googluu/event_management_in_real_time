@@ -52,7 +52,7 @@ class UserService {
       sub: user._id,
       role: user.role,
     };
-    const token = jwt.sign(payload, setup.jwtKey, { expiresIn: '24hr' });
+    const token = jwt.sign(payload, setup.jwtKey, { expiresIn: '1d' });
     return {
       user,
       token,
@@ -62,9 +62,17 @@ class UserService {
   async verifyToken(headers) {
     const token = headers.split('Bearer ')[1];
     if (!token) throw notFound('token not found');
-    const user = jwt.verify(token, setup.jwtKey);
-    if (!user) throw unauthorized();
-    return user;
+    try {
+      const decodedToken = jwt.verify(token, setup.jwtKey);
+
+      if (decodedToken.exp < Date.now() / 1000) {
+        throw unauthorized('Token expired');
+      }
+
+      return decodedToken;
+    } catch (error) {
+      throw unauthorized('Invalid token');
+    }
   }
 
   async getUser(userId) {
