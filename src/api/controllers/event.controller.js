@@ -1,60 +1,72 @@
 import EventService from '../services/event.service.js';
+import { validateHandler } from '../../middleware/validator.handler.js';
+import {
+  createEventDto,
+  updateEventDto,
+  getEventDto,
+} from '../dtos/event.dto.js';
+
 const eventService = new EventService();
 
-class EventController {
-  // constructor() {
-  //   this.eventService = new EventService();
-  // }
+export const createEvent = (req, res, next) => {
+  try {
+    const body = req.body;
 
-  create(req, res) {
-    try {
-      const body = req.body;
-      const newEvent = eventService.create(body);
-      res.status(201).json(newEvent);
-    } catch (error) {
-      console.log(error);
-    }
+    validateHandler(createEventDto, 'body');
+
+    const newEvent = eventService.create(body);
+    res.status(201).json(newEvent);
+  } catch (error) {
+    next(error);
   }
+};
 
-  find(_, res) {
-    try {
-      const events = eventService.find();
-      res.status(200).json(events);
-    } catch (error) {
-      console.log(error);
-    }
+export const findEvents = (_, res, next) => {
+  try {
+    const events = eventService.find();
+    res.status(200).json(events);
+  } catch (error) {
+    next(error);
   }
+};
 
-  findOne(req, res) {
-    try {
-      const { id } = req.params;
-      const event = eventService.findOne(id);
-      res.status(200).json(event);
-    } catch (error) {
-      console.log(error);
-    }
+export const findOneEvent = (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    validateHandler(getEventDto, 'params');
+
+    const event = eventService.findOne(id);
+    res.status(200).json(event);
+  } catch (error) {
+    next(error);
   }
+};
 
-  update(req, res) {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const updateEvent = eventService.update(id, body);
-      res.status(200).json(updateEvent);
-    } catch (error) {
-      console.log(error);
-    }
+export const updateEvent = (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+
+    validateHandler(getEventDto, 'params');
+    validateHandler(updateEventDto, 'body');
+
+    const updateEvent = eventService.update(id, body);
+    res.status(200).json(updateEvent);
+  } catch (error) {
+    next(error);
   }
+};
 
-  delete(req, res) {
-    try {
-      const { id } = req.params;
-      const removeEvent = eventService.delete(id);
-      res.status(200).json(removeEvent);
-    } catch (error) {
-      console.log(error);
-    }
+export const deleteEvent = (req, res) => {
+  try {
+    const { id } = req.params;
+
+    validateHandler(getEventDto, 'params');
+
+    const removeEvent = eventService.delete(id);
+    res.status(204).json(removeEvent);
+  } catch (error) {
+    next(error);
   }
-}
-
-export default EventController;
+};

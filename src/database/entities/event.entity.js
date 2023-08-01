@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-import User from './user.entity.js';
+import { User } from './user.entity.js';
 
 const eventSchema = new Schema({
   title: {

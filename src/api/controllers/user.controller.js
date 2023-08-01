@@ -1,6 +1,7 @@
 import { validateHandler } from '../../middleware/validator.handler.js';
 import { createUser, updateUser, userId } from '../dtos/user.dto.js';
 import UserService from '../services/user.service.js';
+
 const service = new UserService();
 
 export const signup = async (req, res, next) => {

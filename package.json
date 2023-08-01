@@ -19,7 +19,8 @@
     "express": "^4.18.2",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
-    "mongoose": "^7.3.3"
+    "mongoose": "^7.3.3",
+    "timezone-support": "^3.1.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",

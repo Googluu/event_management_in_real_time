@@ -1,56 +1,27 @@
-import { faker } from '@faker-js/faker';
-
-import generateEvents from '../../database/mooks/event.mook.js';
-
+import Event from '../../database/entities/event.entity.js';
 class EventService {
-  constructor() {
-    this.events = [];
-    this.generate();
-  }
-
-  generate() {
-    let limit = 10;
-    for (let i = 0; i < limit; i++) {
-      this.events.push(generateEvents());
-    }
-  }
-
-  create(data) {
-    const newEvent = {
-      id: faker.string.uuid(),
-      ...data,
-    };
-    return this.events.push(newEvent);
+  create(dto) {
+    const newEvent = new Event({
+      ...dto,
+      creator: dto.userId,
+    });
+    return newEvent.save();
   }
 
   find() {
-    return this.events;
+    return Event.find();
   }
 
   findOne(id) {
-    const event = this.events.find((item) => item.id === id);
-    return event;
+    return Event.findById(id).populate('creator');
   }
 
-  update(id, change) {
-    const index = this.events.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new Error(`Cannot find event`);
-    }
-    const event = this.events[index];
-    this.events[index] = {
-      ...event,
-      ...change,
-    };
-    return this.events[index];
+  update(id, changes) {
+    return Event.findByIdAndUpdate(id, changes, { upsert: true, new: true });
   }
 
   delete(id) {
-    const index = this.events.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new Error(`Cannot find event`);
-    }
-    this.events.splice(index, 1);
+    return Event.findByIdAndDelete(id);
   }
 }
 
