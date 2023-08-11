@@ -8,7 +8,7 @@ export const errorHanlder = (err, _, res, next) => {
   next(err);
 };
 
-export const boomErrHandler = (err, req, res, next) => {
+export const boomErrHandler = (err, _, res, next) => {
   if (isBoom(err)) {
     const { payload, statusCode } = err.output;
     res.status(statusCode).json(payload);

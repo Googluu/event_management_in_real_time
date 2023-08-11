@@ -3,7 +3,7 @@ class EventService {
   create(dto) {
     const newEvent = new Event({
       ...dto,
-      creator: dto.userId,
+      creator: dto.creator,
     });
     return newEvent.save();
   }

@@ -1,5 +1,6 @@
 import EventService from '../services/event.service.js';
 import { validateHandler } from '../../middleware/validator.handler.js';
+import { checkRoles } from '../../middleware/auth.handler.js';
 import {
   createEventDto,
   updateEventDto,
@@ -13,6 +14,7 @@ export const createEvent = (req, res, next) => {
     const body = req.body;
 
     validateHandler(createEventDto, 'body');
+    checkRoles('admin' || 'organizador');
 
     const newEvent = eventService.create(body);
     res.status(201).json(newEvent);
@@ -50,6 +52,7 @@ export const updateEvent = (req, res, next) => {
 
     validateHandler(getEventDto, 'params');
     validateHandler(updateEventDto, 'body');
+    checkRoles('admin' || 'organizador');
 
     const updateEvent = eventService.update(id, body);
     res.status(200).json(updateEvent);
@@ -63,6 +66,7 @@ export const deleteEvent = (req, res) => {
     const { id } = req.params;
 
     validateHandler(getEventDto, 'params');
+    checkRoles('admin' || 'organizador');
 
     const removeEvent = eventService.delete(id);
     res.status(204).json(removeEvent);
