@@ -14,6 +14,7 @@ export const createEvent = (req, res, next) => {
     const body = req.body;
 
     validateHandler(createEventDto, 'body');
+    // validar autorizacion(para hacer CRUD) si el usuario tiene el role de admin y organizador
     checkRoles('admin' || 'organizador');
 
     const newEvent = eventService.create(body);
@@ -52,6 +53,7 @@ export const updateEvent = (req, res, next) => {
 
     validateHandler(getEventDto, 'params');
     validateHandler(updateEventDto, 'body');
+    // validar autorizacion(para hacer CRUD) si el usuario tiene el role de admin y organizador
     checkRoles('admin' || 'organizador');
 
     const updateEvent = eventService.update(id, body);
@@ -66,6 +68,7 @@ export const deleteEvent = (req, res) => {
     const { id } = req.params;
 
     validateHandler(getEventDto, 'params');
+    // validar autorizacion(para hacer CRUD) si el usuario tiene el role de admin y organizador
     checkRoles('admin' || 'organizador');
 
     const removeEvent = eventService.delete(id);
