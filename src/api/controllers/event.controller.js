@@ -36,7 +36,7 @@ export const findEvents = (_, res, next) => {
 export const findOneEvent = (req, res, next) => {
   try {
     const { id } = req.params;
-
+    // validar los paramtros de entrada, hacer un 
     validateHandler(getEventDto, 'params');
 
     const event = eventService.findOne(id);
@@ -53,7 +53,7 @@ export const updateEvent = (req, res, next) => {
 
     validateHandler(getEventDto, 'params');
     validateHandler(updateEventDto, 'body');
-    // validar autorizacion(para hacer CRUD) si el usuario tiene el role de admin y organizador
+    // validar autorizacion por parte del usuario para realizar un Crud, si el usuario tiene el role de admin y organizador para la realizacion del CRUD:c
     checkRoles('admin' || 'organizador');
 
     const updateEvent = eventService.update(id, body);
@@ -68,7 +68,7 @@ export const deleteEvent = (req, res) => {
     const { id } = req.params;
 
     validateHandler(getEventDto, 'params');
-    // validar autorizacion(para hacer CRUD) si el usuario tiene el role de admin y organizador
+    // validar autorizacion por parte del usuario para realizar un Crud, si el usuario tiene el role de admin y organizador para la realizacion del CRUD:c
     checkRoles('admin' || 'organizador');
 
     const removeEvent = eventService.delete(id);
